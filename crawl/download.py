@@ -3,17 +3,14 @@ import json
 import cv2
 import numpy as np
 from tqdm import tqdm
+from jsondata import get_json_data
 
 highwayid = 1
 route = (0, 10000)
 
-res = requests.get('https://1968.freeway.gov.tw/api/getRoadInformation', params={'action': "roadinfo", 'freewayid': highwayid,'from_milepost': route[0],'end_milepost': route[1], 'cctv' : True})
-# print(res.json())
+data = get_json_data(highwayid, route[0], route[1])
 
-data = res.json()
-cctv = data["response"]["cctv"]
-
-for each in tqdm(cctv):
+for each in tqdm(data):
     
     url = each["iphone_videourl"]
     cap = cv2.VideoCapture(url)
@@ -31,7 +28,7 @@ for each in tqdm(cctv):
                 init = True          
                 w = frame.shape[1]   
                 h = frame.shape[0]   
-                mp4 = cv2.VideoWriter(f'./video/{each["web_title"]}.mp4', fourcc, 10.0, (w, h))
+                mp4 = cv2.VideoWriter(f'./video/{each["web_title"]}-speed-{each["speed"]}.mp4', fourcc, 10.0, (w, h))
             mp4.write(frame)
         else:
             # print("Cannot receive frame")   # 如果讀取錯誤，印出訊息
