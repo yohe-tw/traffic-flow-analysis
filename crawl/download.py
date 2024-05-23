@@ -7,6 +7,7 @@ from jsondata import get_json_data
 
 highwayid = 1
 route = (0, 10000)
+fps, wait_time = 10.0, 100
 
 data = get_json_data(highwayid, route[0], route[1])
 
@@ -28,12 +29,12 @@ for each in tqdm(data):
                 init = True          
                 w = frame.shape[1]   
                 h = frame.shape[0]   
-                mp4 = cv2.VideoWriter(f'./video/{each["web_title"]}-speed-{each["speed"]}.mp4', fourcc, 10.0, (w, h))
+                mp4 = cv2.VideoWriter(f'./video/{each["web_title"]}-speed-{each["speed"]}.mp4', fourcc, fps, (w, h))
             mp4.write(frame)
         else:
             # print("Cannot receive frame")   # 如果讀取錯誤，印出訊息
             break
         
-        key = cv2.waitKey(100)
+        key = cv2.waitKey(wait_time)
     cap.release()
     
