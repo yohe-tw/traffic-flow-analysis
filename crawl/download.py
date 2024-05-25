@@ -6,7 +6,7 @@ from tqdm import tqdm
 from jsondata import get_json_data
 
 highwayid = 1
-route = (0, 10000)
+route = (0, 5000)
 fps, wait_time = 10.0, 100
 
 data = get_json_data(highwayid, route[0], route[1])
