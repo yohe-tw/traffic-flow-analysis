@@ -1,3 +1,5 @@
 crawl/.venv/
 crawl/data.json
 crawl/video/
+
+.venv/
