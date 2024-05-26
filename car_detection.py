@@ -3,7 +3,7 @@ import cv2
 import os
 
 # capture video/ video path
-cap = cv2.VideoCapture('國道1號南向0.1km-speed-66.mp4')
+cap = cv2.VideoCapture("https://cctvn.freeway.gov.tw/abs2mjpg/bmjpg?camera=10002")
 
 
 #use trained cars XML classifiers
@@ -23,9 +23,9 @@ while True:
     #to draw a rectangle in each cars 
     for (x,y,w,h) in cars:
         cv2.rectangle(frame,(x,y),(x+w,y+h),(0,255,0),2)
-        cv2.imshow('video', frame)
         crop_img = frame[y:y+h,x:x+w]
-
+    
+    cv2.imshow('video', frame)
      #press Q on keyboard to exit
     if cv2.waitKey(25) & 0xFF == ord('q'):
         break
