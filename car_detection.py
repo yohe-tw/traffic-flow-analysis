@@ -3,16 +3,19 @@ import cv2
 import os
 
 # capture video/ video path
-cap = cv2.VideoCapture("https://cctvn.freeway.gov.tw/abs2mjpg/bmjpg?camera=10002")
+cap = cv2.VideoCapture('https://cctvn.freeway.gov.tw/abs2mjpg/bmjpg?camera=10002')
 
 
 #use trained cars XML classifiers
-car_cascade = cv2.CascadeClassifier('haarcascade_cars.xml')
+car_cascade = cv2.CascadeClassifier('haarcascade_car.xml')
 
 #read until video is completed
 while True:
     #capture frame by frame
     ret, frame = cap.read()
+    if (ret == False):
+        cap = cv2.VideoCapture('https://cctvn.freeway.gov.tw/abs2mjpg/bmjpg?camera=10002')
+        continue
     #convert video into gray scale of each frames
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
@@ -23,9 +26,9 @@ while True:
     #to draw a rectangle in each cars 
     for (x,y,w,h) in cars:
         cv2.rectangle(frame,(x,y),(x+w,y+h),(0,255,0),2)
-        crop_img = frame[y:y+h,x:x+w]
-    
     cv2.imshow('video', frame)
+        # crop_img = frame[y:y+h,x:x+w]
+
      #press Q on keyboard to exit
     if cv2.waitKey(25) & 0xFF == ord('q'):
         break
