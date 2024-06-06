@@ -52,10 +52,8 @@ def predict_speed(args, data, device):
     cap = cv2.VideoCapture(url)
     _, image = cap.read()
 
-    
-    line = Drawline(url, [])
-    line.start_draw(image)
-    write_json('point.json', {f'{url}' : line.line})
+    data = read_json('point_r.json')
+    line = Drawline(url, data[url])
     
     model = YOLO('yolov8m.pt')
     track_history = {}
@@ -100,17 +98,19 @@ def predict_speed(args, data, device):
                 else: # detect if vehicle enter the second line
                     if line.line_2_intersect(track["point"][-1], track["point"][-2]):
                         pred_speed.append(21.6 / (time.time() - track['parse']))
-                        print(f"velosity: {pred_speed[-1]} km/hr")
-                        if pred_speed[-1] > 150:
+                        print(f"velosity: {pred_speed[-1]} km/hr", end="")
+                        if abs(pred_speed[-1] - speed) > 40:
                             pred_speed.pop()
+                            print(" out of speed threshold, delete...")
                             pass
-                        if len(pred_speed) == 30:
+                        print("")
+                        if len(pred_speed) > 30:
                             pred_speed.pop(0)
-                        print(f"velosity array: {pred_speed} km/hr")
                         track["parse"] = -1
         
         annotated_frame = draw_speed(annotated_frame, speed, pred_speed)
         cv2.imshow('video', annotated_frame)
+        cv2.imwrite('video/output.png', annotated_frame)
         if cv2.waitKey(1) == ord('q'):
             break
 

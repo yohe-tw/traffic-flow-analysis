@@ -1,10 +1,5 @@
 import numpy as np
 import cv2 
-from ultralytics import YOLO
-import torch
-import time
-from crawl import jsondata
-from argparse import ArgumentParser
 
 
 class Drawline:
