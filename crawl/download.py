@@ -9,7 +9,7 @@ route = (0, 11499)
 fps, wait_time = 10.0, 100
 fourcc = cv2.VideoWriter_fourcc(*'mp4v')
 
-
+data = get_json_data(freewayid=1, start=0, end=10000, maindirection=4)
 
 
 if not os.path.exists('video'):

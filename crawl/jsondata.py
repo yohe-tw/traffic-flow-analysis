@@ -15,7 +15,9 @@ def get_json_data(freewayid=1, start=0, end=10000, maindirection=4):
     for each_road in data["road_extend"]:
         if each_road["freewayid"] == str(freewayid) and \
             ((start <= each_road["end_milepost"] and each_road["end_milepost"] <= end) or \
-             (start <= each_road["from_milepost"] and each_road["from_milepost"] <= end)):
+             (start <= each_road["from_milepost"] and each_road["from_milepost"] <= end) or \
+             (start >= each_road["from_milepost"] and each_road["end_milepost"] >= end) or \
+             (start >= each_road["end_milepost"] and each_road["from_milepost"] >= end)):
             road.append(each_road)
     for each_cctv in data["cctv"]:
         for each_road in road:
@@ -25,7 +27,6 @@ def get_json_data(freewayid=1, start=0, end=10000, maindirection=4):
                     break
 
     data['cctv'] = [d for d in data['cctv'] if d.get("maindirection") == str(maindirection)]
-        
     return data["cctv"]
 
 

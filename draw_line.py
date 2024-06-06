@@ -1,46 +1,17 @@
 import numpy as np
 import cv2 
 from ultralytics import YOLO
-import torch
 import time
 from crawl import jsondata
 from argparse import ArgumentParser
 from draw import Drawline
-import json
-
-# check if gpu if available
-def check_gpu():
-    if torch.cuda.is_available():
-        device = torch.device("cuda:0")
-        print(f'GPU is available, using {torch.cuda.get_device_name(0)}.')
-    else:
-        device = torch.device("cpu")
-        print(f'GPU is unavailable, using cpu instead.')
-    return device
-
-def draw_speed(frame, avg_speed, pred_speed):
-    frame = cv2.copyMakeBorder(frame, 50, 0, 0, 0, cv2.BORDER_CONSTANT, (0, 0, 0))
-    cv2.putText(img=frame, text=f"avg_speed: {avg_speed} km/hr", org=(0, 20), fontFace=0, fontScale=0.5, color=(0, 255, 0), thickness=1)
-    cv2.putText(img=frame, text=f"pred_speed: {np.array(pred_speed).mean().astype('int')} km/hr", org=(0, 45), fontFace=0, fontScale=0.5, color=(0, 255, 0), thickness=1)
-    return frame
-    
-
-def write_json(output, data):
-    with open(output, 'w') as file:
-        json.dump(data, file, indent=4)
-
-def read_json(output):
-    with open(output, 'r') as file:
-        return json.load(file)
+import util
 
 def _parse_argument():
     parser = ArgumentParser()
-    parser.add_argument("--videoshow", type=bool, default=True)
-    parser.add_argument("--videosave", type=bool, default=True)
-    parser.add_argument("--videosavedir", type=str, default="./")
-    parser.add_argument("--jsonsave", type=bool, default=True)
-    parser.add_argument("--jsonsavedir", type=str, default="./")
-    parser.add_argument("--drawline", type=bool, default=True)
+    parser.add_argument("--jsonwritefile", type=str, default="point_w.json")
+    parser.add_argument("--jsonreadfile", type=str, default="point_r.json")
+    parser.add_argument("--drawline", type=bool, default=False)
     args = parser.parse_args()
     return args
 
@@ -52,10 +23,14 @@ def predict_speed(args, data, device):
     cap = cv2.VideoCapture(url)
     _, image = cap.read()
 
+    if args.drawline:
+        line = Drawline(url, [])
+        line.start_draw(image)
+    else:
+        drawdata = util.read_json(args.jsonreadfile)
+        line = Drawline(url, drawdata[url])
     
-    line = Drawline(url, [])
-    line.start_draw(image)
-    write_json('point.json', {f'{url}' : line.line})
+    refresh_speed = 0
     
     model = YOLO('yolov8m.pt')
     track_history = {}
@@ -71,8 +46,15 @@ def predict_speed(args, data, device):
         classids = results[0].boxes.cls.int().cpu().tolist()
         annotated_frame = results[0].plot()
         line.paste_line(annotated_frame)
+
+        refresh_speed += 1
+        if refresh_speed > 200:
+            data = jsondata.get_json_data(data["freewayid"], data["mileage"], data["mileage"] + 1, data["maindirection"])[0]
+            speed = data["speed"]
+            refresh_speed = 0
+
         if results[0].boxes.id == None:
-            annotated_frame = draw_speed(annotated_frame, speed, pred_speed)
+            annotated_frame = util.draw_speed(annotated_frame, speed, pred_speed)
             cv2.imshow('video', annotated_frame)
             if cv2.waitKey(1) == ord('q'):
                 break
@@ -100,32 +82,39 @@ def predict_speed(args, data, device):
                 else: # detect if vehicle enter the second line
                     if line.line_2_intersect(track["point"][-1], track["point"][-2]):
                         pred_speed.append(21.6 / (time.time() - track['parse']))
-                        print(f"velosity: {pred_speed[-1]} km/hr")
-                        if pred_speed[-1] > 150:
+                        print(f"velosity: {pred_speed[-1]} km/hr", end="")
+                        if abs(pred_speed[-1] - speed) > 40:
                             pred_speed.pop()
+                            print(" out of speed threshold, delete...")
                             pass
-                        if len(pred_speed) == 30:
+                        print("")
+                        if len(pred_speed) > 30:
                             pred_speed.pop(0)
-                        print(f"velosity array: {pred_speed} km/hr")
                         track["parse"] = -1
         
-        annotated_frame = draw_speed(annotated_frame, speed, pred_speed)
+        annotated_frame = util.draw_speed(annotated_frame, speed, pred_speed)
         cv2.imshow('video', annotated_frame)
         if cv2.waitKey(1) == ord('q'):
             break
+    return line.line
 
 
 
 def main():
     args = _parse_argument()
-    device = check_gpu()
+    device = util.check_gpu()
+
     datas = jsondata.get_json_data(1, 1800, 10000)
     datas.pop(3)
     datas.pop(3)
     datas.pop(3)
-    print(len(datas))
+
+    print(f'check for {len(datas)} video')
+    drawdata = {}
     for data in datas:
-        predict_speed(args, data, device)
+        drawdata[data['iphone_videourl']] = predict_speed(args, data, device)
+    if args.drawline == True:
+        util.write_json(args.jsonwritefile, drawdata)
     
 
 if __name__ == "__main__":
