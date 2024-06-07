@@ -85,9 +85,9 @@ def predict_speed(args, data, device):
                         print(f"velosity: {pred_speed[-1]} km/hr", end="")
                         if abs(pred_speed[-1] - speed) > 40:
                             pred_speed.pop()
-                            print(" out of speed threshold, delete...")
+                            print(" out of speed threshold, delete...", end="")
                             pass
-                        print("")
+                        print(f"\nlen of speed buffer: {len(pred_speed)}")
                         if len(pred_speed) > 30:
                             pred_speed.pop(0)
                         track["parse"] = -1

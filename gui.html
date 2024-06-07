@@ -11,7 +11,7 @@
     <script>
         function updateImage() {
             const img = document.getElementById('videoStream');
-            img.src = `./video/output.png`; // Add a timestamp to avoid caching
+            img.src = `./gui/1940.jpg?${new Date().getTime()}`; // Add a timestamp to avoid caching
         }
 
         setInterval(updateImage, 100); // Update the image every 100ms
