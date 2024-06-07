@@ -6,9 +6,11 @@ body {
     font-family: 'Comic Sans MS';
 }
 
+
+
 #content {
     display:flex;
-    flex-direction: row;
+    flex-flow: row;
     align-items: center;
     font-family: 'Comic Sans MS';
     justify-content: space-around;
@@ -31,4 +33,14 @@ th {
     align-items: center;
     font-family: 'Comic Sans MS';
     justify-content: space-around;
+}
+
+@media (max-width: 700px) {
+    #content {
+        flex-flow: row wrap;
+        justify-content: center;
+    }
+    table {
+        width: 100%;
+    }
 }

@@ -12,7 +12,7 @@ function handleButtonClick(event) {
 function speed_to_color(speed) {
     if(speed <= 20) return `rgb(255, 0, 0)`;
     else if(speed <= 60) return `rgb(255, ${Math.floor((speed - 20) * 256 / 40)}, 0)`;
-    else if(speed < 100) return `rgb(${Math.floor((speed - 60) * 256 / 40)}, 255, 0)`;
+    else if(speed < 100) return `rgb(${Math.floor((100 - speed) * 256 / 40)}, 255, 0)`;
     else return `rgb(0, 255, 0)`;
 }
 
@@ -24,7 +24,7 @@ document.querySelectorAll('button').forEach(button => {
 
 function updateInfo() {
     const img = document.getElementById('videoStream');
-    img.src = `./gui/${play_video}.jpg?${new Date().getTime()}`; // Add a timestamp to avoid caching
+    img.src = `./gui/${play_video}.jpg?t=${new Date().getTime()}`; // Add a timestamp to avoid caching
     const imgtitle = document.getElementById('videoTitle');
     imgtitle.textContent = `Showing mileage ${play_video} monitor`;
 
