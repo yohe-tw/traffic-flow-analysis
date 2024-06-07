@@ -3,18 +3,80 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Video Streaming</title>
+    <title>traffic flow speed estimate demo</title>
+
+    <script type="text/javascript" src="./gui/main.js" defer="true"></script>
+    <link rel="stylesheet" href="./gui/style.css"></style>
 </head>
 <body>
-    <h1>Video Streaming</h1>
-    <img id="videoStream" width="640" height="480">
-    <script>
-        function updateImage() {
-            const img = document.getElementById('videoStream');
-            img.src = `./gui/1940.jpg?${new Date().getTime()}`; // Add a timestamp to avoid caching
-        }
-
-        setInterval(updateImage, 100); // Update the image every 100ms
-    </script>
+    <h1>Traffic flow speed estimate demo</h1>
+    <div id="content">
+        <table>
+            <tr>
+                <th>mileage</th>
+                <th>average speed</th>
+                <th>predict speed</th>
+                <th>video button</th>
+            </tr>
+            <tr id="1940" class="videorow">
+                <th class="mileage"></th>
+                <th class="avg"></th>
+                <th class="pred"></th>
+                <th><button>show video</button></th>
+            </tr>
+            <tr id="2640" class="videorow">
+                <th class="mileage"></th>
+                <th class="avg"></th>
+                <th class="pred"></th>
+                <th><button>show video</button></th>
+            </tr>
+            <tr id="3180" class="videorow">
+                <th class="mileage"></th>
+                <th class="avg"></th>
+                <th class="pred"></th>
+                <th><button>show video</button></th>
+            </tr>
+            <tr id="5900" class="videorow">
+                <th class="mileage"></th>
+                <th class="avg"></th>
+                <th class="pred"></th>
+                <th><button>show video</button></th>
+            </tr>
+            <tr id="5950" class="videorow">
+                <th class="mileage"></th>
+                <th class="avg"></th>
+                <th class="pred"></th>
+                <th><button>show video</button></th>
+            </tr>
+            <tr id="7300" class="videorow">
+                <th class="mileage"></th>
+                <th class="avg"></th>
+                <th class="pred"></th>
+                <th><button>show video</button></th>
+            </tr>
+            <tr id="9400" class="videorow">
+                <th class="mileage"></th>
+                <th class="avg"></th>
+                <th class="pred"></th>
+                <th><button>show video</button></th>
+            </tr>
+            <tr id="9770" class="videorow">
+                <th class="mileage"></th>
+                <th class="avg"></th>
+                <th class="pred"></th>
+                <th><button>show video</button></th>
+            </tr>
+            <tr id="9930" class="videorow">
+                <th class="mileage"></th>
+                <th class="avg"></th>
+                <th class="pred"></th>
+                <th><button>show video</button></th>
+            </tr>
+        </table>
+        <div id="video">
+            <h1 id="videoTitle"></h1>
+            <img id="videoStream" width="352" height="290">
+        </div>
+    </div>
 </body>
 </html>

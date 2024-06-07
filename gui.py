@@ -85,6 +85,7 @@ def predict_speed(data, device):
         
         annotated_frame = util.draw_speed(annotated_frame, speed, pred_speed)
         cv2.imwrite(f"./gui/{data['mileage']}.jpg", annotated_frame)
+        util.write_json(f"./gui/{data['mileage']}.json", [speed, int(np.array(pred_speed).mean())])
 
 
 

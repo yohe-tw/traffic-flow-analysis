@@ -5,3 +5,7 @@ video/
 data.json
 .venv/
 report_img/
+
+gui/*
+!gui/main.js
+!gui/style.css
