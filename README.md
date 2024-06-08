@@ -5,9 +5,9 @@ This repo is an implement of final project from course Introduction to Intellige
 
 ## feature
 
-- real-time car speed detection for the whole Taiwan Highway
+- real-time car speed detection for the whole Taiwan Highway  
 ![](./demo/heavy.png)
-- several monitor from  Xizhi to Keelung has been labeled
+- several monitor from  Xizhi to Keelung has been labeled  
 ![](./demo/line.png)
 - the demo website is at [here](https://www.csie.ntu.edu.tw/~b10902048/)
 - video:
@@ -29,11 +29,19 @@ pip install -r requirements.txt
 ```
 
 ## traditional method
+![](./demo/traditional.png)  
+run the following command:
+```
+cd Traditional
+python car_detection.py
+```
 
-I don't know how to run this code..
 
 ## pipeline of this project:
 ![](./demo/pipeline.png)
+
+### each file usage:
+tbd...
 
 
 
