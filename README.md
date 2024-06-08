@@ -1,7 +1,6 @@
 
 This repo is an implement of final project from course Introduction to Intelligent Vehicles （智慧型汽車導論）
-
-![](./demo/gui_demo.png)
+![](./demo/demo.gif)
 
 ## feature
 
@@ -10,9 +9,6 @@ This repo is an implement of final project from course Introduction to Intellige
 - several monitor from  Xizhi to Keelung has been labeled  
 ![](./demo/line.png)
 - the demo website is at [here](https://www.csie.ntu.edu.tw/~b10902048/)
-- video:
-
-- 
 
 ## environment setup
 
