@@ -1,3 +1,17 @@
-# implement code for A Survey and Implementation of Vision-Based Highway Traffic Flow Analysis and Speed Detection
 
-## environment
+
+## environment setup
+```
+pip install ultralytics
+```
+our recommend python version is `3.10.5`
+
+## traditional method
+
+I don't know how to 
+
+
+
+
+
+
